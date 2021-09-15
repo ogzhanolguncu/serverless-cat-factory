@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.83",
+    "@types/http-errors": "^1.8.1",
+    "serverless": "^2.58.0",
+    "serverless-bundle": "^5.0.1",
+    "serverless-plugin-typescript": "^2.0.0",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@middy/core": "^2.5.1",
+    "@middy/http-error-handler": "^2.5.1",
+    "@middy/http-event-normalizer": "^2.5.1",
+    "@middy/http-json-body-parser": "^2.5.1",
+    "@middy/validator": "^2.5.1",
+    "aws-sdk": "^2.988.0",
+    "http-errors": "^1.8.0",
+    "nanoid": "^3.1.25"
+  }
+}
