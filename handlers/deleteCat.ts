@@ -21,7 +21,7 @@ async function deleteCat(event: APIGatewayEvent) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: "Cannot delete an item that does not exist.",
+          message: "Cannot delete a cat that does not exist.",
         }),
       };
     }

@@ -1,5 +1,5 @@
 declare namespace Cat {
-  type CreatePayload = {
+  type Payload = {
     name: string;
     color: string;
     age: number;

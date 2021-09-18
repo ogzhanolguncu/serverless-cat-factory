@@ -12,31 +12,16 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     CAT_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    CAT_BUCKET_NAME: ${self:custom.CatBucket.name}
   iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:PutItem
-        - dynamodb:GetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CAT_TABLE}"
+    - ${file(iams/CatTableIAM.yml):CatTableIAM}
+    - ${file(iams/CatBucketIAM.yml):CatBucketIAM}
 
 resources:
   Resources:
-    CatTable:
-      Type: "AWS::DynamoDB::Table"
-      DeletionPolicy: Retain
-      Properties:
-        TableName: ${self:provider.environment.CAT_TABLE}
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
+    CatTable: ${file(resources/CatTable.yml):CatTable}
+    CatBucket: ${file(resources/CatBucket.yml):CatBucket}
+    CatBucketPolicy: ${file(resources/CatBucket.yml):CatBucketPolicy}
 
 functions:
   getCats:
@@ -64,6 +49,15 @@ functions:
           method: DELETE
           path: cat/{id}
 
+  updateCat:
+    handler: handlers/updateCat.handler
+    events:
+      - http:
+          method: PUT
+          path: cat/{id}
+
 custom:
   bundle:
     esbuild: true
+  CatBucket:
+    name: cats-bucket-xsql-${opt:stage, self:provider.stage}
